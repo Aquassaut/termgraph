@@ -38,25 +38,28 @@ def main():
         print(">> Error: Label and data array sizes don't match")
         sys.exit(1)
 
+    # get longest label for padding
+    label_max_width = len(max(labels, key=len))
+
     # massage data
     ## normalize for graph
-    max = 0
+    max_data = 0
     for i in range(m):
-        if data[i] > max:
-            max = data[i]
+        if data[i] > max_data:
+            max_data = data[i]
 
-    step = max / args['width']
+    step = max_data / args['width']
     # display graph
     for i in range(m):
-        print_blocks(labels[i], data[i], step)
+        print_blocks(labels[i], data[i], step, label_max_width)
 
     print()
 
 
-def print_blocks(label, count, step):
+def print_blocks(label, count, step, label_width):
     #TODO: add flag to hide data labels
     blocks = int(count / step)
-    print("{}: ".format(label), end="")
+    print("{{:<{}}}: ".format(label_width).format(label), end="")
     if count < step:
         sys.stdout.write(sm_tick)
     else:
